@@ -23,8 +23,30 @@ jobs:
       
       # Step 4: Train the model
       - name: Train Model
-        run: python src/model.py  # This will generate iris_model.pkl
+        run: python src/model.py  # This will generate iris_model.pkl and other outputs
       
       # Step 5: Run the tests
       - name: Run tests
         run: pytest src/test_model.py
+
+      # Step 6: Update HTML Report
+      - name: Update HTML Report
+        run: |
+          echo "<html>
+            <head><title>Model Report</title></head>
+            <body>
+              <h1>AI Model Report</h1>
+              <h2>Model: Random Forest Classifier</h2>
+              <h2>Dataset: Iris</h2>
+              <h2>Accuracy: $(cat assets/metrics.txt | grep 'Accuracy' | cut -d' ' -f2)</h2>
+              <h2>Confusion Matrix:</h2>
+              <img src='assets/confusion_matrix.png' alt='Confusion Matrix'>
+              <p>This page is automatically generated from the model training process.</p>
+            </body>
+          </html>" > index.html
+
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add index.html
+          git commit -m "Update report with latest metrics"
+          git push
