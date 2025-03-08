@@ -2,14 +2,17 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -17,13 +20,17 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
       
-      - name: Upload artifact
+      # Optional: Debug step to confirm the 'docs' folder is present
+      - name: List 'docs' Directory
+        run: ls -la docs
+      
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./docs
-          artifact_name: github-pages  # explicitly name the artifact
+          path: docs           # Ensure this is the correct folder with your site content
+          artifact_name: github-pages  # Explicit artifact name
       
-      - name: Deploy
+      - name: Deploy Pages
         uses: actions/deploy-pages@v2
         with:
-          artifact_name: github-pages  # tell deploy step which artifact to use
+          artifact_name: github-pages  # Must match the name above
