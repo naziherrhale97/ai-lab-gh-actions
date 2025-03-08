@@ -1,38 +1,33 @@
 name: CI Pipeline
 
-# This workflow runs on every push or pull request
+permissions:
+  contents: write  # Allow write access to the repository contents
+
 on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Check out the repository code
       - uses: actions/checkout@v4
       
-      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
       
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: pip install -r requirements.txt
       
-      # Step 4: Train the model
       - name: Train Model
-        run: python src/model.py  # This will generate iris_model.pkl and other outputs
+        run: python src/model.py
       
-      # Step 5: Run the tests
       - name: Run tests
         run: pytest src/test_model.py
 
-      # Step 6: Ensure the assets directory exists
       - name: Ensure assets directory exists
         run: mkdir -p assets
 
-      # Step 7: Update HTML Report
       - name: Update HTML Report
         run: |
           echo "<html>
@@ -48,15 +43,13 @@ jobs:
             </body>
           </html>" > index.html
 
-      # Step 8: Commit and push changes
       - name: Publish HTML Report
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Update report with latest metrics"
           branch: main
           file_pattern: index.html
-          commit_user_name: "GitHub Actions"
-          commit_user_email: "actions@github.com"
+          commit_user_name: "github-actions[bot]"  # Set bot as the user
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"  # Set bot email
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  # Use the default GITHUB_TOKEN
-
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN  }}  # Ensure this is the default token
