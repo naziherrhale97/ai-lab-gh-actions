@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:  # Allows manual triggering of the workflow
 
 permissions:
   contents: read
@@ -20,17 +21,17 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
       
-      # Optional: Debug step to confirm the 'docs' folder is present
+      # Optional: Debug step to confirm the 'docs' folder exists
       - name: List 'docs' Directory
         run: ls -la docs
       
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: docs           # Ensure this is the correct folder with your site content
-          artifact_name: github-pages  # Explicit artifact name
+          path: docs
+          artifact_name: github-pages
       
       - name: Deploy Pages
         uses: actions/deploy-pages@v2
         with:
-          artifact_name: github-pages  # Must match the name above
+          artifact_name: github-pages
