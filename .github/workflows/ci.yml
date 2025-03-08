@@ -1,0 +1,26 @@
+# .github/workflows/ci.yml
+name: CI Pipeline
+
+# This workflow runs on every push or pull request
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the repository code
+      - uses: actions/checkout@v4
+      
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      
+      # Step 4: Run the tests
+      - name: Run tests
+        run: pytest src/test_model.py
