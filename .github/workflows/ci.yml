@@ -34,8 +34,6 @@ jobs:
 
       # Step 7: Update HTML Report
       - name: Update HTML Report
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the default GITHUB_TOKEN
         run: |
           echo "<html>
             <head><title>Model Report</title></head>
@@ -49,8 +47,16 @@ jobs:
               <p>This page is automatically generated from the model training process.</p>
             </body>
           </html>" > index.html
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add index.html
-          git commit -m "Update report with latest metrics" || echo "No changes to commit"
-          git push
+
+      # Step 8: Commit and push changes
+      - name: Publish HTML Report
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update report with latest metrics"
+          branch: main
+          file_pattern: index.html
+          commit_user_name: "GitHub Actions"
+          commit_user_email: "actions@github.com"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the default GITHUB_TOKEN
+
