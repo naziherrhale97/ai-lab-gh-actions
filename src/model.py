@@ -1,11 +1,15 @@
+import os  
+import joblib
+import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-import joblib
-import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import matplotlib
 matplotlib.use('Agg')
+
+# Create the assets directory if it doesn't exist
+os.makedirs("assets", exist_ok=True)
 
 # Load the Iris dataset
 iris = load_iris()
@@ -31,7 +35,7 @@ disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=iris.target_na
 plt.figure(figsize=(8, 6))
 disp.plot(cmap=plt.cm.Blues)
 plt.title("Confusion Matrix")
-plt.savefig("ai-lab-gh-actions/assets/confusion_matrix.png")  # Save the plot as an image
+plt.savefig("assets/confusion_matrix.png")  # Save the plot as an image
 plt.close()  # Close the plot to free up memory
 
 # Optionally, you can save other metrics like accuracy, precision, etc.
@@ -39,7 +43,7 @@ accuracy = model.score(X_test, y_test)
 print(f"Accuracy: {accuracy:.2f}")
 
 # You can also save the accuracy to a text file or log it in your report
-with open("ai-lab-gh-actions/assets/metrics.txt", "w") as f:
+with open("assets/metrics.txt", "w") as f:
     f.write(f"Model: Random Forest Classifier\n")
     f.write(f"Dataset: Iris\n")
     f.write(f"Accuracy: {accuracy:.2f}\n")
