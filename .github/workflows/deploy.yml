@@ -26,10 +26,11 @@ jobs:
         run: ls -la docs
       
       - name: Upload Pages Artifact
-        uses: actions/upload-artifact@v3  # Explicitly using v3
+        uses: github.com/actions/upload-artifact@v3
         with:
+          name: github-pages
           path: docs
-          name: github-pages  # Ensure artifact name matches
+
 
       - name: Deploy Pages
         uses: actions/deploy-pages@v2
