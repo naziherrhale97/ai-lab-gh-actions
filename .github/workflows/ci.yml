@@ -35,7 +35,7 @@ jobs:
       # Step 7: Update HTML Report
       - name: Update HTML Report
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN}}
         run: |
           echo "<html>
             <head><title>Model Report</title></head>
