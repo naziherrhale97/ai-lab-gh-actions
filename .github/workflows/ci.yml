@@ -21,6 +21,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       
-      # Step 4: Run the tests
+      # Step 4: Train the model
+      - name: Train Model
+        run: python src/model.py  # This will generate iris_model.pkl
+      
+      # Step 5: Run the tests
       - name: Run tests
         run: pytest src/test_model.py
