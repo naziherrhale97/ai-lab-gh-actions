@@ -16,24 +16,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3  # Use v3 explicitly
+        uses: actions/checkout@v3  
       
       - name: Setup Pages
         uses: actions/configure-pages@v3
-      
-      # Debug step to check contents of 'docs'
-      - name: List 'docs' Directory
+
+      - name: Debug - List 'docs' Directory
         run: ls -la docs
-      
+
       - name: Upload Pages Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v2  # ✅ Use GitHub Pages artifact uploader
         with:
-          name: github-pages
           path: docs
 
-
+      - name: Debug - List Artifacts
+        run: |
+          ls -la ${{ runner.temp }}/_github_home/_work/_temp/
 
       - name: Deploy Pages
         uses: actions/deploy-pages@v2
-        with:
-          artifact_name: github-pages
