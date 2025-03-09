@@ -25,8 +25,8 @@ jobs:
       - name: Run tests
         run: pytest src/test_model.py
 
-      - name: Ensure assets directory exists
-        run: mkdir -p assets
+      - name: Ensure docs directory exists
+        run: mkdir -p docs
 
       - name: Update HTML Report
         run: |
@@ -92,25 +92,25 @@ jobs:
 
                   <table>
                       <tr><th>Metric</th><th>Value</th></tr>
-                      <tr><td>Accuracy</td><td>$(cat assets/metrics.txt | grep 'Accuracy' | cut -d' ' -f2)</td></tr>
+                      <tr><td>Accuracy</td><td>$(cat docs/metrics.txt | grep 'Accuracy' | cut -d' ' -f2)</td></tr>
                   </table>
 
                   <h2>Confusion Matrix</h2>
-                  <img src='assets/confusion_matrix.png' alt='Confusion Matrix'>
+                  <img src='docs/confusion_matrix.png' alt='Confusion Matrix'>
 
                   <p class='footer'>This page is automatically generated from the model training process.</p>
               </div>
           </body>
-          </html>" > index.html
-
+          </html>" > docs/index.html
 
       - name: Publish HTML Report
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Update report with latest metrics"
           branch: main
-          file_pattern: index.html
+          file_pattern: docs/index.html
           commit_user_name: "github-actions[bot]"  # Set bot as the user
           commit_user_email: "github-actions[bot]@users.noreply.github.com"  # Set bot email
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN  }}  # Ensure this is the default token
+
