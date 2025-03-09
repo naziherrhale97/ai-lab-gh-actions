@@ -21,15 +21,22 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
-      - name: List 'docs' Directory (Debugging)
-        run: ls -la docs
+      - name: Run Model Training (Generate Confusion Matrix)
+        run: |
+          pip install -r requirements.txt  # Ensure dependencies are installed
+          python src/model.py  # Run the model script
 
-      - name: Publish to GitHub Pages (Commit & Push)
+      - name: Ensure assets are available
+        run: |
+          ls -la
+          ls -la assets  # Debugging step to check if assets exist
+
+      - name: Commit and Push Generated Files
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "Automated GitHub Pages deployment"
+          commit_message: "Automated GitHub Pages deployment - Include assets"
           branch: main
-          file_pattern: docs/**
+          file_pattern: "docs/** assets/**"
           push_options: '--force'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
