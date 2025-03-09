@@ -89,24 +89,17 @@ jobs:
                   <h1>AI Model Report</h1>
                   <h2>Model: Random Forest Classifier</h2>
                   <h2>Dataset: Iris</h2>
-
                   <table>
                       <tr><th>Metric</th><th>Value</th></tr>
                       <tr><td>Accuracy</td><td>$(cat docs/metrics.txt | grep 'Accuracy' | cut -d' ' -f2)</td></tr>
                   </table>
-
                   <h2>Confusion Matrix</h2>
                   <img src='./confusion_matrix.png' alt='Confusion Matrix'>
-
                   <p class='footer'>This page is automatically generated from the model training process.</p>
               </div>
           </body>
           </html>" > docs/index.html
-
-      - name: Ensure Confusion Matrix is Uploaded
-        run: |
-          cp docs/confusion_matrix.png docs/confusion_matrix.png
-
+      
       - name: Publish HTML Report
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -117,4 +110,3 @@ jobs:
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
