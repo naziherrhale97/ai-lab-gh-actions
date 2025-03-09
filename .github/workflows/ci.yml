@@ -96,21 +96,25 @@ jobs:
                   </table>
 
                   <h2>Confusion Matrix</h2>
-                  <img src='docs/confusion_matrix.png' alt='Confusion Matrix'>
+                  <img src='./confusion_matrix.png' alt='Confusion Matrix'>
 
                   <p class='footer'>This page is automatically generated from the model training process.</p>
               </div>
           </body>
           </html>" > docs/index.html
 
+      - name: Ensure Confusion Matrix is Uploaded
+        run: |
+          cp docs/confusion_matrix.png docs/confusion_matrix.png
+
       - name: Publish HTML Report
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Update report with latest metrics"
           branch: main
-          file_pattern: docs/index.html
-          commit_user_name: "github-actions[bot]"  # Set bot as the user
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"  # Set bot email
+          file_pattern: docs/index.html docs/confusion_matrix.png docs/metrics.txt
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN  }}  # Ensure this is the default token
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
