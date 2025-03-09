@@ -31,13 +31,18 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Model and Generate Confusion Matrix
-        run: python src/model.py  # Ensure this script generates the confusion matrix inside 'assets/'
+      - name: Train Model & Generate Reports
+        run: python src/model.py  # This generates assets/confusion_matrix.png and metrics.txt
 
-      - name: Ensure assets folder exists in docs
+      - name: Ensure docs directory exists
+        run: mkdir -p docs
+
+      - name: Move assets to docs (Ensure GitHub Pages Serves Them)
         run: |
-          mkdir -p docs/assets
-          cp -r assets/* docs/assets/  # Copy confusion matrix & metrics to docs
+          mv assets/* docs/
+
+      - name: Move HTML Report to docs
+        run: mv index.html docs/
 
       - name: List 'docs' Directory (Debugging)
         run: ls -la docs
@@ -45,9 +50,9 @@ jobs:
       - name: Publish to GitHub Pages (Commit & Push)
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "Automated GitHub Pages deployment (including assets)"
+          commit_message: "Deploy updated reports to GitHub Pages"
           branch: main
           file_pattern: docs/**
           push_options: '--force'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Ensure default token is used
