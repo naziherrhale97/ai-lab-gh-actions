@@ -14,29 +14,32 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-      - name: Run Model Training (Generate Confusion Matrix)
+      - name: Upgrade pip and setuptools
         run: |
-          pip install -r requirements.txt  # Ensure dependencies are installed
-          python src/model.py  # Run the model script
+          pip install --upgrade pip setuptools wheel
 
-      - name: Ensure assets are available
-        run: |
-          ls -la
-          ls -la assets  # Debugging step to check if assets exist
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
 
-      - name: Commit and Push Generated Files
+      - name: List 'docs' Directory (Debugging)
+        run: ls -la docs
+
+      - name: Publish to GitHub Pages (Commit & Push)
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "Automated GitHub Pages deployment - Include assets"
+          commit_message: "Automated GitHub Pages deployment"
           branch: main
-          file_pattern: "docs/** assets/**"
+          file_pattern: docs/**
           push_options: '--force'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
