@@ -31,13 +31,21 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
 
+      - name: Run Model and Generate Confusion Matrix
+        run: python src/model.py  # Ensure this script generates the confusion matrix inside 'assets/'
+
+      - name: Ensure assets folder exists in docs
+        run: |
+          mkdir -p docs/assets
+          cp -r assets/* docs/assets/  # Copy confusion matrix & metrics to docs
+
       - name: List 'docs' Directory (Debugging)
         run: ls -la docs
 
       - name: Publish to GitHub Pages (Commit & Push)
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "Automated GitHub Pages deployment"
+          commit_message: "Automated GitHub Pages deployment (including assets)"
           branch: main
           file_pattern: docs/**
           push_options: '--force'
